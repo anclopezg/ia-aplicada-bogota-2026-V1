@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Aplicada a la Industria — Bogotá 2026 | Análisis Descriptivo, Predictivo, QGIS & Visión Artificial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════ */
+        /* SPACEX-STYLE DESIGN SYSTEM             */
+        /* ═══════════════════════════════════════ */
+        :root {
+            --bg: #000000;
+            --text: #f0f0fa;
+            --text-dim: rgba(240, 240, 250, 0.5);
+            --cyan: #00e5ff;
+            --violet: #7c4dff;
+            --green: #00e676;
+            --gold: #ffd700;
+            --orange: #ff6b35;
+        }
+
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--cyan) var(--bg);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* PROGRESS BAR                            */
+        /* ═══════════════════════════════════════ */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--violet), var(--green));
+            z-index: 10000;
+            transition: width 0.15s ease;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* STICKY NAVIGATION                       */
+        /* ═══════════════════════════════════════ */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 9999;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(240, 240, 250, 0.06);
+        }
+
+        .nav-brand {
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* SECTIONS — FULL VIEWPORT                */
+        /* ═══════════════════════════════════════ */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* TYPOGRAPHY                              */
+        /* ═══════════════════════════════════════ */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-align: center;
+            line-height: 1.1;
+            opacity: 0;
+        }
+
+        .section-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 300;
+            letter-spacing: 0.06em;
+            color: var(--text-dim);
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.7;
+            margin-top: 1.5rem;
+            opacity: 0;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: var(--cyan);
+            margin: 2rem auto;
+            opacity: 0;
+        }
+
+        .highlight {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        .highlight-v {
+            color: var(--violet);
+            font-weight: 600;
+        }
+
+        .highlight-g {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .highlight-o {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        .highlight-d {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* GRADIENT BACKGROUNDS                    */
+        /* ═══════════════════════════════════════ */
+        .grad-cyan::before {
+            background: radial-gradient(ellipse at 30% 40%, rgba(0,229,255,0.07) 0%, transparent 55%);
+        }
+        .grad-violet::before {
+            background: radial-gradient(ellipse at 70% 30%, rgba(124,77,255,0.07) 0%, transparent 55%);
+        }
+        .grad-green::before {
+            background: radial-gradient(ellipse at 50% 60%, rgba(0,230,118,0.07) 0%, transparent 55%);
+        }
+        .grad-mixed::before {
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,229,255,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, rgba(124,77,255,0.06) 0%, transparent 50%);
+        }
+        .grad-gold::before {
+            background: radial-gradient(ellipse at 60% 40%, rgba(255,215,0,0.05) 0%, transparent 55%);
+        }
+        .grad-orange::before {
+            background: radial-gradient(ellipse at 40% 60%, rgba(255,107,53,0.05) 0%, transparent 55%);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* GRID / COLUMNS                          */
+        /* ═══════════════════════════════════════ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            width: 100%;
+            margin-top: 2.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 2.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 2.5rem;
+        }
+
+        /* Feature block — no cards, just text over background */
+        .feature {
+            padding: 1.5rem;
+            border-left: 1px solid rgba(240,240,250,0.1);
+            opacity: 0;
+        }
+
+        .feature h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+            color: var(--cyan);
+        }
+
+        .feature p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            line-height: 1.7;
+            letter-spacing: 0.03em;
+        }
+
+        .feature a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,229,255,0.3);
+            transition: border-color 0.2s;
+        }
+
+        .feature a:hover {
+            border-color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* STATS                                   */
+        /* ═══════════════════════════════════════ */
+        .stats-row {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .stat {
+            text-align: center;
+            opacity: 0;
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            max-width: 200px;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* STEPS                                   */
+        /* ═══════════════════════════════════════ */
+        .step-list {
+            max-width: 800px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            margin: 1.5rem 0;
+            opacity: 0;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--cyan);
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-dim);
+            line-height: 1.7;
+            letter-spacing: 0.03em;
+            text-transform: none;
+        }
+
+        .step-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* GHOST BUTTON                            */
+        /* ═══════════════════════════════════════ */
+        .ghost-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border: 1px solid rgba(240,240,250,0.2);
+            border-radius: 0;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            background: transparent;
+            cursor: pointer;
+            margin-top: 2rem;
+        }
+
+        .ghost-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* BADGES (Kahoot, etc.)                   */
+        /* ═══════════════════════════════════════ */
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 0;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin: 0.3rem;
+        }
+
+        .badge-kahoot {
+            border: 1px solid var(--orange);
+            color: var(--orange);
+        }
+
+        .badge-ia {
+            border: 1px solid var(--violet);
+            color: var(--violet);
+        }
+
+        .badge-blockchain {
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+        }
+
+        .badge-actividad {
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* TABLE                                   */
+        /* ═══════════════════════════════════════ */
+        .comp-table {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 2rem;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            opacity: 0;
+        }
+
+        .comp-table th {
+            text-align: left;
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(240,240,250,0.15);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--cyan);
+        }
+
+        .comp-table td {
+            padding: 0.7rem 0.8rem;
+            border-bottom: 1px solid rgba(240,240,250,0.05);
+            color: var(--text-dim);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: none;
+        }
+
+        .comp-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* MARQUEE                                 */
+        /* ═══════════════════════════════════════ */
+        .marquee-wrapper {
+            overflow: hidden;
+            width: 100%;
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(240,240,250,0.05);
+            border-bottom: 1px solid rgba(240,240,250,0.05);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-item {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* QUOTE                                   */
+        /* ═══════════════════════════════════════ */
+        .quote {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-dim);
+            border-left: 2px solid var(--violet);
+            padding-left: 2rem;
+            max-width: 800px;
+            text-align: left;
+            line-height: 1.7;
+            text-transform: none;
+            letter-spacing: 0.01em;
+            margin-top: 2rem;
+            opacity: 0;
+        }
+
+        .quote strong {
+            color: var(--text);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* IMAGE                                   */
+        /* ═══════════════════════════════════════ */
+        .section-image {
+            width: 100%;
+            max-width: 900px;
+            max-height: 350px;
+            object-fit: cover;
+            margin: 2rem 0;
+            opacity: 0;
+            filter: brightness(0.7) contrast(1.1);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* HERO SPECIFIC                           */
+        /* ═══════════════════════════════════════ */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        #hero::before {
+            background:
+                radial-gradient(ellipse at 50% 30%, rgba(0,229,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(124,77,255,0.06) 0%, transparent 50%);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            line-height: 1.05;
+            text-align: center;
+        }
+
+        .hero-title span {
+            display: block;
+            background: linear-gradient(135deg, var(--text) 0%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .hero-tagline {
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            font-weight: 600;
+            color: var(--cyan);
+            margin-top: 1rem;
+            letter-spacing: 0.2em;
+        }
+
+        /* Stars */
+        #stars-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 1px solid var(--cyan);
+            border-bottom: 1px solid var(--cyan);
+            transform: rotate(45deg);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* FOOTER                                  */
+        /* ═══════════════════════════════════════ */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(240,240,250,0.05);
+        }
+
+        footer p {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+        }
+
+        footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* ANIMATIONS — Scroll Reveal              */
+        /* ═══════════════════════════════════════ */
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-fade {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .reveal-fade.active {
+            opacity: 1;
+        }
+
+        .line-draw {
+            opacity: 0;
+            width: 0;
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .line-draw.active {
+            opacity: 1;
+            width: 60px;
+        }
+
+        .parallax-bg {
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        /* Stagger delays */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+        .delay-7 { transition-delay: 0.7s; }
+
+        /* ═══════════════════════════════════════ */
+        /* KAHOOt NOTE (integrated badge)          */
+        /* ═══════════════════════════════════════ */
+        .kahoot-note {
+            margin-top: 2rem;
+            padding: 1.5rem 2rem;
+            border: 1px solid rgba(255,107,53,0.2);
+            background: rgba(255,107,53,0.03);
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .kahoot-note h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .kahoot-note p {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* TWO-COLUMN                              */
+        /* ═══════════════════════════════════════ */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            margin-top: 2rem;
+            align-items: center;
+        }
+
+        .two-col-text {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            line-height: 1.8;
+            text-transform: none;
+            letter-spacing: 0.02em;
+        }
+
+        .two-col-text p {
+            margin: 1rem 0;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* TIMER BOX                               */
+        /* ═══════════════════════════════════════ */
+        .timer-box {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--cyan);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--cyan);
+            letter-spacing: 0.15em;
+            margin: 1rem 0;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* LINKS                                   */
+        /* ═══════════════════════════════════════ */
+        a.text-link {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,229,255,0.3);
+            transition: border-color 0.2s;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: inherit;
+        }
+
+        a.text-link:hover {
+            border-color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* RESPONSIVE                              */
+        /* ═══════════════════════════════════════ */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1rem; }
+            .nav-links { display: none; }
+            section { padding: 5rem 1.5rem 3rem; }
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .stats-row { gap: 1.5rem; }
+            .comp-table { font-size: 0.7rem; }
+            .comp-table th, .comp-table td { padding: 0.5rem; }
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* SOURCE CREDITS                          */
+        /* ═══════════════════════════════════════ */
+        .source {
+            font-size: 0.65rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            text-transform: none;
+            letter-spacing: 0;
+            margin-top: 1.5rem;
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        .source a {
+            color: var(--text-dim);
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(240,240,250,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PROGRESS BAR -->
+    <div id="progress-bar"></div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-brand">IA × INDUSTRIA</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Inicio</a></li>
+            <li><a href="#problema">Problema</a></li>
+            <li><a href="#descriptivo">Descriptivo</a></li>
+            <li><a href="#predictivo">Predictivo</a></li>
+            <li><a href="#qgis">QGIS</a></li>
+            <li><a href="#vision">Visión</a></li>
+            <li><a href="#optimizacion">Optimización</a></li>
+            <li><a href="#ia">IA</a></li>
+            <li><a href="#blockchain">Blockchain</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 1. HERO                                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="hero">
+        <canvas id="stars-canvas"></canvas>
+        <div class="section-inner">
+            <div class="hero-title reveal-fade">
+                <span>Inteligencia Artificial</span>
+                <span>Aplicada a la Industria</span>
+            </div>
+            <div class="line-draw delay-1" style="margin: 1.5rem auto;"></div>
+            <p class="hero-sub reveal-up delay-2">Análisis descriptivo, predictivo, QGIS, visión artificial y optimización — IA que transforma industrias en Bogotá y toda Colombia</p>
+            <p class="hero-tagline reveal-up delay-3">Bogotá · Industria 4.0 · Datos que deciden · Máquinas que ven</p>
+            <div style="margin-top: 1.5rem;" class="reveal-up delay-4">
+                <span class="badge badge-ia">Inteligencia Artificial</span>
+                <span class="badge badge-blockchain">Automatización</span>
+                <span class="badge badge-blockchain">Blockchain</span>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.7rem; color: var(--text-dim);" class="reveal-up delay-5">Colombia 5.0 · MinTIC · Universidad Distrital Francisco José de Caldas · En alianza con Tr=ce</p>
+            <a href="#problema" class="ghost-btn reveal-up delay-6">Explorar</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 2. PREGUNTA PROVOCADORA                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="pregunta" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pregunta</div>
+            <h2 class="section-title reveal-left delay-1">¿Cuántas horas pierde<br>tu empresa en tareas<br>repetitivas?</h2>
+            <div class="line-draw delay-2"></div>
+            <p class="section-subtitle reveal-up delay-3">
+                Un productor de Tumaco envía 50 correos manuales por semana. Un artesano de Guapi repite su catálogo 20 veces al mes. Una panadería en Cali inventariza a mano cada mañana.
+            </p>
+            <p class="section-subtitle reveal-up delay-4" style="margin-top: 1rem;">
+                <span class="highlight">¿Cuánto de eso podría hacerlo una máquina — gratis — mientras tú duermes?</span>
+            </p>
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80" alt="Automatización industrial" class="section-image reveal-scale delay-5" style="max-height: 180px;">
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 3. EL PROBLEMA                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="problema" class="grad-mixed">
+        <div class="section-inner">
+            <div class="section-label reveal-left">El contexto</div>
+            <h2 class="section-title reveal-left delay-1">El Problema:<br>Brecha Digital y<br>Competencia Global</h2>
+            <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=80" alt="Brecha digital" class="section-image reveal-scale delay-2" style="max-height: 200px;">
+            <div class="stats-row">
+                <div class="stat reveal-scale delay-3">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-label">De las actividades laborales son automatizables con IA</div>
+                </div>
+                <div class="stat reveal-scale delay-4">
+                    <div class="stat-number">$4.4T</div>
+                    <div class="stat-label">Impacto anual estimado de IA generativa en la economía</div>
+                </div>
+                <div class="stat reveal-scale delay-5">
+                    <div class="stat-number">1 DE 4</div>
+                    <div class="stat-label">Empresas colombianas usan herramientas digitales avanzadas</div>
+                </div>
+            </div>
+            <p class="source reveal-fade delay-6">
+                <a href="https://www.mckinsey.com/featured-insights/generative-ai/the-economic-potential-of-generative-ai" target="_blank">McKinsey — Economic Potential of GenAI (2023)</a> ·
+                <a href="https://www.weforum.org/reports/the-future-of-jobs-report-2023/" target="_blank">WEF — Future of Jobs Report</a> ·
+                <a href="https://www.dane.gov.co" target="_blank">DANE</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 4. LA OPORTUNIDAD DEL PACÍFICO                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="oportunidad" class="grad-green">
+        <div class="section-inner">
+            <div class="section-label reveal-left">La oportunidad</div>
+            <h2 class="section-title reveal-left delay-1">La Oportunidad:<br>Bogotá y toda Colombia</h2>
+            <div class="two-col">
+                <div class="two-col-text reveal-up delay-2">
+                    <p><strong>Bogotá concentra el 25% del PIB industrial de Colombia</strong>. La capital es el hub tecnológico, financiero y logístico del país. Desde aquí, las empresas del centro, occidente, Pacífico y Caribe se conectan con el mundo.</p>
+                    <p>Pero la <strong class="highlight-v">brecha tecnológica</strong> sigue ahí: pocas PYMEs usan datos para decidir. Automatizar con IA no es lujo — es <strong class="highlight-g">supervivencia empresarial</strong>.</p>
+                    <p>Hoy vamos a conocer <strong class="highlight-g">5 pilares</strong> de la IA aplicada: análisis descriptivo, análisis predictivo, QGIS, visión artificial y optimización. Herramientas que cualquier empresa puede usar HOY.</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Datos y analytics" class="section-image reveal-scale delay-3" style="max-height: 300px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 5. ESTRUCTURA DEL TALLER                        -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="estructura" class="grad-cyan">
+        <div class="section-inner">
+            <div class="section-label reveal-left">El plan</div>
+            <h2 class="section-title reveal-left delay-1">Estructura<br>del Taller</h2>
+            <p class="section-subtitle reveal-up delay-2">~3 horas · Más de la mitad del tiempo vamos a estar de pie, en grupo, probando herramientas.</p>
+            <div class="step-list">
+                <div class="step reveal-left delay-2">
+                    <div class="step-num">1</div>
+                    <div class="step-text"><strong>Apertura y Contexto</strong> — 20 min · El problema, la oportunidad, objetivos</div>
+                </div>
+                <div class="step reveal-left delay-3">
+                    <div class="step-num">2</div>
+                    <div class="step-text"><strong>IA: Automatizar Procesos</strong> — 35 min · Qué es la IA, casos reales, herramientas prácticas</div>
+                </div>
+                <div class="step reveal-left delay-4">
+                    <div class="step-num">3</div>
+                    <div class="step-text"><strong>Blockchain: Certificar Origen</strong> — 35 min · Trazabilidad, EUDR, herramientas accesibles</div>
+                </div>
+                <div class="step reveal-left delay-5">
+                    <div class="step-num">4</div>
+                    <div class="step-text"><strong>Taller Práctico Dinámico</strong> — 70+ min · 8 actividades + energizadores + 6 dinámicas extra</div>
+                </div>
+                <div class="step reveal-left delay-6">
+                    <div class="step-num">5</div>
+                    <div class="step-text"><strong>Cierre y Networking</strong> — 20 min · Hoja de ruta, recursos, café</div>
+                </div>
+            </div>
+            <!-- KAHoot 1 -->
+            <div class="kahoot-note reveal-up delay-7">
+                <span class="badge badge-kahoot">🎮 KAHoot 1</span>
+                <h4>El Despertar Digital</h4>
+                <p>5 preguntas rápidas — 20 segundos cada una. ¿Entendieron el problema?</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 6. MODELO vs ASISTENTE vs AGENTE                 -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="modelo" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Conceptos clave</div>
+            <h2 class="section-title reveal-left delay-1">Modelo, Asistente<br>y Agente IA:<br>¿Cuál es la diferencia?</h2>
+            <table class="comp-table reveal-up delay-2">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th style="color: var(--violet);">Modelo IA</th>
+                        <th style="color: var(--green);">Asistente</th>
+                        <th style="color: var(--orange);">Agente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Rol Principal</td><td>Generar / Procesar datos</td><td>Conversar / Ayudar</td><td>Actuar / Resolver</td></tr>
+                    <tr><td>Autonomía</td><td>Nula (requiere prompt)</td><td>Baja (reactivo)</td><td>Alta (proactivo)</td></tr>
+                    <tr><td>Acción</td><td>Genera texto/imagen</td><td>Responde preguntas</td><td>Ejecuta tareas/herramientas</td></tr>
+                    <tr><td>Proceso</td><td>Paso único</td><td>Paso único / Lineal</td><td>Multitarea / Iterativo</td></tr>
+                    <tr><td>Conectividad</td><td>Aislado</td><td>Limitada / API básica</td><td>Conectado a herramientas externas</td></tr>
+                    <tr><td>Objetivo</td><td>Entender / Generar</td><td>Responder / Asistir</td><td>Cumplir una meta</td></tr>
+                    <tr><td>Ejemplo</td><td>GPT-4o, Claude 3.5</td><td>ChatGPT, Gemini, Alexa</td><td>AutoGPT, Copilot Studio</td></tr>
+                </tbody>
+            </table>
+            <div class="stats-row reveal-up delay-3" style="margin-top: 2rem;">
+                <div class="stat reveal-scale delay-3">
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--violet); font-weight: 600;">Modelo</div>
+                    <div style="font-size: 0.75rem; margin-top: 0.3rem; color: var(--text-dim); text-transform: none;">"Dime qué significa X"</div>
+                </div>
+                <div class="stat reveal-scale delay-4">
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--green); font-weight: 600;">Asistente</div>
+                    <div style="font-size: 0.75rem; margin-top: 0.3rem; color: var(--text-dim); text-transform: none;">"Escríbeme un correo sobre X"</div>
+                </div>
+                <div class="stat reveal-scale delay-5">
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--orange); font-weight: 600;">Agente</div>
+                    <div style="font-size: 0.75rem; margin-top: 0.3rem; color: var(--text-dim); text-transform: none;">"Investiga X, escribe el correo, envíalo y avísame"</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 7. CÓMO FUNCIONA LA IA                          -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="como-funciona" class="grad-mixed">
+        <div class="section-inner">
+            <div class="section-label reveal-left">De lo simple a lo complejo</div>
+            <h2 class="section-title reveal-left delay-1">¿Cómo Funciona la IA?</h2>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>📈 Regresión Lineal</h4>
+                    <p><strong>Qué hace:</strong> Encuentra la línea recta que mejor se ajusta a los datos.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Para qué sirve:</strong> Predecir ventas, estimar precios, proyectar demanda. Si vendes 100 unidades a $50 y 200 a $40, la regresión te dice cuánto vender a $45.</p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>🧠 Red Neuronal</h4>
+                    <p><strong>Qué hace:</strong> Une múltiples "líneas rectas" con curvas (activaciones) para entender patrones complejos.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Para qué sirve:</strong> Reconocer imágenes, clasificar productos, detectar fraudes. Distinguir cacao fino de cacao común analizando fotos del grano.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>💬 LLM</h4>
+                    <p><strong>Qué hace:</strong> Una red neuronal gigante que predice la probabilidad del siguiente token basándose en el contexto.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Para qué sirve:</strong> Generar textos, responder preguntas, traducir idiomas, crear contenido. ChatGPT, Claude, Gemini.</p>
+                </div>
+            </div>
+            <p class="section-subtitle reveal-up delay-5" style="margin-top: 2rem;">
+                <span class="highlight">No necesitas entender las matemáticas</span> para usar estas herramientas. Solo necesitas saber <span class="highlight-v">cuándo y cómo aplicarlas</span> en tu negocio.
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 8. ANÁLISIS DESCRIPTIVO                          -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="descriptivo" class="grad-cyan">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pilar 1</div>
+            <h2 class="section-title reveal-left delay-1">Análisis<br>Descriptivo</h2>
+            <p class="section-subtitle reveal-up delay-2">¿Qué pasó? ¿Qué está pasando? <span class="highlight">Los datos cuentan la historia de tu empresa</span> — si sabes leerlos.</p>
+            <div class="divider line-draw delay-2"></div>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>📊 Dashboards en Tiempo Real</h4>
+                    <p>Visualiza ventas, inventario, producción y costos en paneles interactivos. <strong>Looker Studio, Power BI, Google Sheets</strong> — gratis.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Para qué:</strong> Ver tendencias, detectar caídas, tomar decisiones hoy — no el próximo mes.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>📈 KPIs que Importan</h4>
+                    <p>No todos los datos son útiles. Define 5-7 indicadores clave: rotación de inventario, margen por producto, costo de adquisición de cliente.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Regla de oro:</strong> Si no lo puedes medir, no lo puedes mejorar.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>🔍 Análisis Exploratorio</h4>
+                    <p>Usa IA para encontrar patrones ocultos en tus datos: ¿Qué productos se venden más en temporada de lluvias? ¿Qué días de la semana tienes más pedidos?</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Sube tu Excel a ChatGPT o Claude y di "analiza estos datos y dime qué encuentras."</p>
+                </div>
+            </div>
+            <div class="stats-row reveal-up delay-6">
+                <div class="stat reveal-scale delay-6">
+                    <div class="stat-number">80%</div>
+                    <div class="stat-label">De las empresas no usan sus datos para tomar decisiones estratégicas</div>
+                </div>
+                <div class="stat reveal-scale delay-7">
+                    <div class="stat-number">5x</div>
+                    <div class="stat-label">Más rápido deciden las empresas orientadas a datos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 9. ANÁLISIS PREDICTIVO                           -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="predictivo" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pilar 2</div>
+            <h2 class="section-title reveal-left delay-1">Análisis<br>Predictivo</h2>
+            <p class="section-subtitle reveal-up delay-2">¿Qué va a pasar? La IA no solo describe el pasado — <span class="highlight-v">predice el futuro</span> con datos históricos.</p>
+            <div class="divider line-draw delay-2"></div>
+            <div class="grid-2">
+                <div class="feature reveal-scale delay-3">
+                    <h4>🔮 Predicción de Demanda</h4>
+                    <p><strong>Qué hace:</strong> Usa tus ventas históricas + estacionalidad + tendencias para predecir cuánto vas a vender el próximo mes.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Impacto:</strong> Reduce inventario excesivo en 20-30%. Evita quiebres de stock. Planifica compras con anticipación.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Python + Prophet (Meta) · Excel con regresión · ChatGPT con tus datos.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>⚠️ Detección Temprana de Riesgos</h4>
+                    <p><strong>Qué hace:</strong> Identifica señales de alerta antes de que el problema estalle: clientes que dejan de comprar, productos con tendencia a la baja, proveedores con retrasos recurrentes.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Impacto:</strong> Prevenir es 10x más barato que reaccionar.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Modelos de clasificación en Google AutoML (capa gratuita) · scikit-learn.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>📉 Forecasting con Machine Learning</h4>
+                    <p><strong>Qué hace:</strong> Algoritmos como ARIMA, Random Forest y LSTM aprenden patrones de series temporales: estacionalidad, ciclos, tendencias.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Ejemplo:</strong> Una panadería en Kennedy predice cuántos panes hornear cada día — reduce desperdicio un 35%.</p>
+                </div>
+                <div class="feature reveal-scale delay-6">
+                    <h4>🎯 Predicción de Abandono (Churn)</h4>
+                    <p><strong>Qué hace:</strong> Detecta qué clientes tienen alta probabilidad de irse a la competencia — antes de que se vayan.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Impacto:</strong> Retener un cliente cuesta 5x menos que conseguir uno nuevo.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Regresión logística en Python · Clasificadores en Azure ML Studio (gratuito).</p>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" alt="Análisis predictivo" class="section-image reveal-scale delay-5" style="max-height: 200px;">
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 10. QGIS — SISTEMA DE INFORMACIÓN GEOGRÁFICA    -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="qgis" class="grad-green">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pilar 3</div>
+            <h2 class="section-title reveal-left delay-1">QGIS:<br>Inteligencia<br>Geográfica</h2>
+            <p class="section-subtitle reveal-up delay-2"><span class="highlight-g">Todo tiene una ubicación.</span> Dónde están tus clientes, tus proveedores, tus rutas — los mapas revelan patrones invisibles en una tabla.</p>
+            <div class="divider line-draw delay-2"></div>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>🗺️ ¿Qué es QGIS?</h4>
+                    <p>Sistema de Información Geográfica <strong>open source y gratuito</strong>. Crea mapas profesionales, analiza distribuciones espaciales, superpone capas de datos.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Alternativa profesional</strong> a ArcGIS ($2,000+/año). Lo usan gobiernos, ONGs y empresas en 170+ países.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://qgis.org" target="_blank" class="text-link">qgis.org</a></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>📍 Casos de Uso Industrial</h4>
+                    <p><strong>Logística:</strong> Optimiza rutas de entrega en Bogotá según tráfico, distancia y demanda por zona.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Agricultura:</strong> Mapea rendimiento por hectárea, detecta zonas con estrés hídrico usando imágenes satelitales.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Comercio:</strong> Identifica dónde abrir una nueva sede analizando densidad poblacional y competencia.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>🛰️ Datos Geoespaciales + IA</h4>
+                    <p>Combina QGIS con IA para análisis avanzado:</p>
+                    <p style="margin-top: 0.5rem;">· <strong>Google Earth Engine</strong>: Imágenes satelitales históricas · Deforestación, cultivos, inundaciones</p>
+                    <p>· <strong>OpenStreetMap</strong>: Datos abiertos de infraestructura vial</p>
+                    <p>· <strong>DANE</strong>: Datos censales georreferenciados de Colombia</p>
+                </div>
+            </div>
+            <div class="two-col reveal-up delay-6" style="margin-top: 2rem;">
+                <div class="two-col-text">
+                    <p><strong class="highlight">Ejemplo real en Bogotá:</strong> Una distribuidora de alimentos usa QGIS para mapear sus 200 puntos de venta, superponer datos de estrato socioeconómico y planificar rutas de entrega que reducen costos de combustible en <strong class="highlight-g">22%</strong>.</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80" alt="Mapa geográfico" class="section-image reveal-scale" style="max-height: 200px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 11. VISIÓN ARTIFICIAL / ANÁLISIS DE IMÁGENES     -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="vision" class="grad-orange">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pilar 4</div>
+            <h2 class="section-title reveal-left delay-1">Visión Artificial:<br>Máquinas que Ven</h2>
+            <p class="section-subtitle reveal-up delay-2">La IA no solo lee texto — <span class="highlight-o">entiende imágenes</span>. Puede detectar defectos, clasificar productos, leer documentos y analizar fotos mejor que el ojo humano.</p>
+            <div class="divider line-draw delay-2"></div>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>🔍 Detección de Defectos</h4>
+                    <p><strong>Inspección visual automatizada:</strong> Cámaras + IA detectan grietas, decoloración, deformaciones en productos manufacturados en tiempo real.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Impacto:</strong> Reduce rechazos de calidad en 40-60%. Funciona 24/7 sin fatiga.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> YOLO (You Only Look Once) · OpenCV · Google Vision API.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>📸 Clasificación de Imágenes</h4>
+                    <p><strong>Qué hace:</strong> Entrena un modelo para reconocer categorías: cacao fino vs. ordinario, fruta madura vs. verde, producto dañado vs. bueno.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Ejemplo:</strong> Una empacadora de frutas en Mosquera clasifica 5,000 unidades/hora con una cámara y un modelo entrenado con 500 fotos.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Teachable Machine (Google, gratis) · Roboflow · Lobe (Microsoft).</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>📄 OCR y Análisis de Documentos</h4>
+                    <p><strong>Qué hace:</strong> Extrae texto de facturas, recibos, certificados, fotos de documentos. Convierte papel en datos digitales.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Impacto:</strong> Automatiza la digitación de cientos de documentos. Elimina errores humanos de transcripción.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Google Document AI · Tesseract (open source) · ChatGPT Vision.</p>
+                </div>
+            </div>
+            <div class="grid-2 reveal-up delay-6" style="margin-top: 2rem;">
+                <div class="feature reveal-scale" style="border-color: var(--cyan);">
+                    <h4 style="color: var(--cyan);">🚗 Caso: Inspección Vehicular en Bogotá</h4>
+                    <p>CDR (Centro de Diagnóstico Automotriz) usa visión artificial para detectar rayones, abolladuras y óxido en vehículos usados. <strong>Reduce tiempo de inspección de 45 min a 8 min.</strong></p>
+                </div>
+                <div class="feature reveal-scale" style="border-color: var(--green);">
+                    <h4 style="color: var(--green);">🌾 Caso: Detección de Plagas con Drones</h4>
+                    <p>Imágenes multiespectrales de drones + IA detectan estrés en cultivos antes de que sea visible al ojo humano. <strong>Ahorro del 25% en pesticidas</strong> al aplicar solo donde se necesita.</p>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&q=80" alt="Visión artificial" class="section-image reveal-scale delay-5" style="max-height: 200px;">
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 12. OPTIMIZACIÓN                                 -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="optimizacion" class="grad-gold">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Pilar 5</div>
+            <h2 class="section-title reveal-left delay-1">Optimización:<br>Hacer Más<br>con Menos</h2>
+            <p class="section-subtitle reveal-up delay-2">La optimización matemática encuentra <span class="highlight-d">la mejor solución posible</span> dentro de tus restricciones: tiempo, presupuesto, capacidad.</p>
+            <div class="divider line-draw delay-2"></div>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>🚚 Optimización de Rutas</h4>
+                    <p><strong>Problema:</strong> 20 entregas en Bogotá, 3 vehículos, horarios distintos, tráfico impredecible. ¿Cuál es la mejor ruta?</p>
+                    <p style="margin-top: 0.5rem;"><strong>Solución:</strong> Algoritmos de Vehicle Routing Problem (VRP) calculan la combinación óptima en segundos.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Resultado:</strong> RapiCargo redujo 38km diarios por vehículo — ahorro de $2.4M COP/mes en combustible.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Google OR-Tools (gratis) · Mapbox Optimization API.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>📦 Optimización de Inventario</h4>
+                    <p><strong>Problema:</strong> ¿Cuánto stock mantener? Demasiado = costo de almacenamiento. Muy poco = ventas perdidas.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Solución:</strong> Modelos de optimización estocástica calculan el punto óptimo considerando demanda variable y lead times.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Resultado:</strong> Reducción de 25% en costos de inventario sin afectar nivel de servicio.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> PuLP (Python, open source) · Excel Solver.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>⚙️ Optimización de Producción</h4>
+                    <p><strong>Problema:</strong> ¿En qué orden producir? ¿Qué máquinas asignar? ¿Cuántos turnos?</p>
+                    <p style="margin-top: 0.5rem;"><strong>Solución:</strong> Programación lineal entera (ILP) encuentra el plan de producción que minimiza costos y maximiza throughput.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Resultado:</strong> Planta de alimentos en Funza aumentó producción 18% sin agregar maquinaria.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Herramienta:</strong> Gurobi (licencia académica gratis) · CBC · Google OR-Tools.</p>
+                </div>
+            </div>
+            <div class="stats-row reveal-up delay-6">
+                <div class="stat reveal-scale delay-6">
+                    <div class="stat-number">-38km</div>
+                    <div class="stat-label">Reducción diaria por vehículo con optimización de rutas en Bogotá</div>
+                </div>
+                <div class="stat reveal-scale delay-7">
+                    <div class="stat-number">-25%</div>
+                    <div class="stat-label">Reducción en costos de inventario sin perder ventas</div>
+                </div>
+                <div class="stat reveal-scale delay-7">
+                    <div class="stat-number">+18%</div>
+                    <div class="stat-label">Aumento de producción sin inversión en maquinaria nueva</div>
+                </div>
+            </div>
+            <p class="source reveal-fade delay-7">
+                Estos son casos reales de empresas colombianas que usan optimización con herramientas gratuitas.
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 13. IA: TU EMPLEADO DIGITAL                      -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="empleado" class="grad-cyan">
+        <div class="section-inner">
+            <span class="badge badge-ia reveal-fade">Bloque 2</span>
+            <h2 class="section-title reveal-left delay-1" style="margin-top: 1rem;">Inteligencia Artificial:<br>Tu Empleado Digital<br>que No Duerme</h2>
+            <p class="section-subtitle reveal-up delay-2">No necesitas ser programador. No necesitas invertir millones. Solo necesitas saber <span class="highlight-v">pedirle a la máquina lo que necesitas</span>.</p>
+            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80" alt="Inteligencia Artificial" class="section-image reveal-scale delay-3" style="max-height: 220px;">
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 9. ¿QUÉ ES LA IA?                               -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="que-es-ia" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Piensa en un asistente</div>
+            <h2 class="section-title reveal-left delay-1">¿Qué es la IA?</h2>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>🧠 Entiende</h4>
+                    <p>La IA lee, escucha y ve. Puede entender textos en 100+ idiomas, analizar imágenes, transcribir audio. <strong>Es como tener un empleado políglota.</strong></p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>✍️ Genera</h4>
+                    <p>Escribe correos, crea presentaciones, diseña catálogos, redacta propuestas comerciales. <strong>Todo en segundos, no en horas.</strong></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>📊 Analiza</h4>
+                    <p>Predice demanda, detecta patrones de calidad, analiza tendencias de mercado. <strong>Decisiones basadas en datos, no en intuición.</strong></p>
+                </div>
+            </div>
+            <p class="section-subtitle reveal-up delay-5" style="margin-top: 1.5rem;">
+                <a href="https://chat.openai.com" target="_blank" class="text-link">ChatGPT</a> ·
+                <a href="https://claude.ai" target="_blank" class="text-link">Claude</a> ·
+                <a href="https://gamma.app" target="_blank" class="text-link">Gamma</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 10. CASOS REALES IA                              -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="casos-ia" class="grad-green">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Casos reales</div>
+            <h2 class="section-title reveal-left delay-1">IA en Empresas<br>Latinoamericanas</h2>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>🏪 Mercado Libre</h4>
+                    <p>Usa IA para <strong>predecir demanda</strong> en cada región, optimizar rutas de entrega y personalizar recomendaciones. <strong>Resultado:</strong> entregas 2x más rápidas.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://investor.mercadolibre.com" target="_blank" class="text-link">investor.mercadolibre.com</a></p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>☕ ProfilePrint</h4>
+                    <p>Startup colombiana que usa <strong>IA para evaluar la calidad del café</strong> analizando aromas y sabores con sensores + machine learning. Ya opera en 15 países.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://profileprint.ai/whitepaper/coffee/" target="_blank" class="text-link">profileprint.ai</a></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>🚀 Rappi</h4>
+                    <p>Chatbots de IA manejan el <strong>80% de consultas de soporte</strong> sin intervención humana. Predicen qué vas a pedir antes de que lo busques.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.rappi.com.co" target="_blank" class="text-link">rappi.com.co</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 11. HERRAMIENTAS IA                              -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="herramientas-ia" class="grad-mixed">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Herramientas</div>
+            <h2 class="section-title reveal-left delay-1">Herramientas de IA<br>para tu Empresa</h2>
+            <p class="section-subtitle reveal-up delay-2">Todas tienen versión gratuita. Todas se pueden usar hoy.</p>
+        </div>
+        <div class="marquee-wrapper">
+            <div class="marquee-track">
+                <span class="marquee-item">ChatGPT</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Claude</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Gamma</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Canva AI</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Google Trends</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Lovable</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Perplexity AI</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">ChatGPT</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Claude</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Gamma</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Canva AI</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Google Trends</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Lovable</span>
+                <span class="marquee-item">·</span>
+                <span class="marquee-item">Perplexity AI</span>
+                <span class="marquee-item">·</span>
+            </div>
+        </div>
+        <div class="section-inner">
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>💬 ChatGPT / Claude</h4>
+                    <p>Correos, propuestas, traducciones, análisis de datos, brainstorming. El <strong>asistente polivalente</strong> que todo negocio necesita.</p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>📊 Gamma / Tome</h4>
+                    <p>Genera <strong>presentaciones profesionales</strong> desde un prompt. Ideal para catálogos, propuestas comerciales y pitch decks.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>🎨 Canva AI</h4>
+                    <p>Diseña logos, posts de Instagram, flyers y catálogos con <strong>IA generativa integrada</strong>. No necesitas diseñador.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>🌐 Google Trends</h4>
+                    <p>Descubre qué buscan tus clientes potenciales en tiempo real. <strong>Datos de mercado gratis</strong>.</p>
+                </div>
+                <div class="feature reveal-scale delay-6">
+                    <h4>📝 Lovable / v0</h4>
+                    <p>Crea páginas web y aplicaciones <strong>escribiendo en lenguaje natural</strong>. Sin código.</p>
+                </div>
+                <div class="feature reveal-scale delay-7">
+                    <h4>📧 Perplexity AI</h4>
+                    <p>Motor de búsqueda con IA que <strong>investiga mercados</strong> y te da respuestas con fuentes verificadas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 12. COMBO IA + BLOCKCHAIN                        -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="combo" class="grad-gold">
+        <div class="section-inner">
+            <div class="section-label reveal-left">El combo poderoso</div>
+            <h2 class="section-title reveal-left delay-1">IA + Blockchain</h2>
+            <div class="two-col">
+                <div class="two-col-text reveal-up delay-2">
+                    <p><strong class="highlight-v">La IA</strong> automatiza procesos, genera contenido, analiza datos y responde a clientes.</p>
+                    <p><strong class="highlight">Blockchain</strong> certifica el origen, genera confianza y permite exportar con trazabilidad verificable.</p>
+                    <p><strong class="highlight-g">Juntas:</strong> Tu empresa produce, certifica y vende al mundo — con herramientas gratuitas y sin saber programar.</p>
+                </div>
+                <div class="feature reveal-scale delay-3" style="border-color: var(--gold);">
+                    <h4 style="color: var(--gold);">💡 Ejemplo Real</h4>
+                    <p>Un productor de cacao en el Chocó:</p>
+                    <p style="margin-top: 0.5rem;">· Usa IA para escribir su propuesta comercial en inglés</p>
+                    <p>· Registra su cosecha en blockchain para certificar origen</p>
+                    <p>· Genera su catálogo con Canva AI</p>
+                    <p>· Envía todo a un comprador en Alemania</p>
+                    <p style="margin-top: 0.5rem; color: var(--green); font-weight: 600;">Costo total: $0 en software.</p>
+                </div>
+            </div>
+            <!-- KAHoot 2 -->
+            <div class="kahoot-note reveal-up delay-4">
+                <span class="badge badge-kahoot">🎮 KAHoot 2</span>
+                <h4>IA en Acción</h4>
+                <p>5 preguntas sobre lo que acabamos de ver. Regresión, Redes Neuronales, LLM, herramientas de IA. ¡Demuestra lo que aprendiste!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 13. BLOCKCHAIN: NOTARIO DIGITAL                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="blockchain" class="grad-cyan">
+        <div class="section-inner">
+            <span class="badge badge-blockchain reveal-fade">Bloque 3</span>
+            <h2 class="section-title reveal-left delay-1" style="margin-top: 1rem;">Blockchain:<br>El Notario Digital<br>Incorruptible</h2>
+            <p class="section-subtitle reveal-up delay-2">Imagina un libro de registros que <span class="highlight">nadie puede borrar, alterar ni hackear</span>. Eso es blockchain.</p>
+            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&q=80" alt="Blockchain" class="section-image reveal-scale delay-3" style="max-height: 220px;">
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 14. CÓMO FUNCIONA BLOCKCHAIN                     -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="como-blockchain" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Piensa en una cadena</div>
+            <h2 class="section-title reveal-left delay-1">¿Cómo Funciona<br>Blockchain?</h2>
+            <img src="https://images.unsplash.com/photo-1625314887424-9f190599bd56?w=1000&q=80" alt="Blockchain visual" class="section-image reveal-scale delay-2" style="max-height: 140px;">
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>1. Registro</h4>
+                    <p>Cada acción se graba como un "bloque" — como una <strong>página del libro</strong>. Incluye fecha, lugar, responsable, qué pasó.</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>2. Encadenamiento</h4>
+                    <p>Cada bloque se conecta al anterior con un código matemático único. Si alguien altera uno, <strong>toda la cadena se rompe</strong>.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>3. Distribución</h4>
+                    <p>Ese libro está copiado en <strong>miles de computadores</strong>. Para alterar un dato, tendrías que cambiar miles de copias al mismo tiempo. <strong>Imposible falsificar.</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 15. PARA QUÉ LE SIRVE                            -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="para-que-sirve" class="grad-green">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Beneficios</div>
+            <h2 class="section-title reveal-left delay-1">¿Para qué le sirve<br>a TU empresa?</h2>
+            <div class="step-list">
+                <div class="step reveal-left delay-2">
+                    <div class="step-num">1</div>
+                    <div class="step-text"><strong>Certificar origen</strong> — Demostrar de dónde viene tu producto, quién lo hizo, con qué materiales</div>
+                </div>
+                <div class="step reveal-left delay-3">
+                    <div class="step-num">2</div>
+                    <div class="step-text"><strong>Generar confianza</strong> — Un QR que muestra todo el historial verificado: el comprador decide con datos</div>
+                </div>
+                <div class="step reveal-left delay-4">
+                    <div class="step-num">3</div>
+                    <div class="step-text"><strong>Cumplir regulaciones</strong> — EUDR europeo (vigente), FDA FSMA Rule 204 en EE.UU. (cumplimiento julio 2028)</div>
+                </div>
+                <div class="step reveal-left delay-5">
+                    <div class="step-num">4</div>
+                    <div class="step-text"><strong>Cobrar más</strong> — El 67% de consumidores paga premium por productos con blockchain verificado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 16. EUDR                                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="eudr" class="grad-orange">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Regulación</div>
+            <h2 class="section-title reveal-left delay-1">EUDR:<br>La Normativa<br>que Cambia Todo</h2>
+            <div class="two-col">
+                <div class="two-col-text reveal-up delay-2">
+                    <p>El <strong class="highlight">Reglamento de Deforestación de la UE (EUDR)</strong> obliga a demostrar que los productos importados no causaron deforestación.</p>
+                    <p>Aplica a: café, cacao, soja, aceite de palma, madera, caucho, ganado y sus derivados.</p>
+                    <p><strong class="highlight-g">Fecha límite: 30 dic 2025</strong> (grandes) / <strong class="highlight-g">30 jun 2026</strong> (PYMEs). Ya es ley vigente.</p>
+                    <p style="color: var(--orange); font-weight: 600; font-size: 1rem; margin-top: 1rem;">No es si va a pasar — ya pasó.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en" target="_blank" class="text-link">Comisión Europea — EUDR</a></p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1473090826765-d54ac2fdc1eb?w=800&q=80" alt="Europa" class="section-image reveal-scale delay-3" style="max-height: 280px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 17. CASOS REALES BLOCKCHAIN                      -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="casos-blockchain" class="grad-mixed">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Casos reales</div>
+            <h2 class="section-title reveal-left delay-1">Blockchain Certificando<br>Origen en el Mundo</h2>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>☕ Farmer Connect</h4>
+                    <p>Plataforma blockchain (IBM Transparent Supply) en alianza con la <strong>Federación Nacional de Cafeteros de Colombia</strong>. App "Thank My Farmer" con QR desde la finca.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.farmerconnect.com" target="_blank" class="text-link">farmerconnect.com</a></p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>🍫 Tony's Chocolonely</h4>
+                    <p>Trazabilidad 100% del cacao con <strong>BeanTracker</strong> (ChainPoint) + piloto blockchain con Accenture: 900 ton, 400 transacciones rastreadas.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://tonyschocolonely.com/pages/bean-tracker" target="_blank" class="text-link">Bean Tracker</a></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>👗 TextileGenesis</h4>
+                    <p><strong>H&M</strong> trazó +200 millones de prendas con "Fibercoins" digitales. <strong>Lenzing</strong> rastrea fibras TENCEL en +20 países.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://textilegenesis.com" target="_blank" class="text-link">textilegenesis.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 18. HERRAMIENTAS BLOCKCHAIN                      -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="herramientas-blockchain" class="grad-cyan">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Herramientas</div>
+            <h2 class="section-title reveal-left delay-1">Herramientas Blockchain<br>para PYMEs</h2>
+            <p class="section-subtitle reveal-up delay-2">No necesitas ser programador. Estas plataformas hacen el trabajo pesado.</p>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-3">
+                    <h4>VeChain ToolChain</h4>
+                    <p>Plataforma empresarial usada por Walmart, Bayer y DNV. Permite crear un sistema de trazabilidad <strong>sin escribir código</strong>.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.vechain.org" target="_blank" class="text-link">vechain.org</a></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>OriginTrail DKG</h4>
+                    <p>Open source. Conecta datos de origen con la blockchain. Ideal para cacao, café y productos agrícolas de exportación.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://origintrail.io" target="_blank" class="text-link">origintrail.io</a></p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>Provenance</h4>
+                    <p>Plataforma enfocada en el <strong>mercado europeo</strong>. Permite a pequeñas marcas demostrar la historia de sus productos.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.provenance.org" target="_blank" class="text-link">provenance.org</a></p>
+                </div>
+            </div>
+            <!-- KAHoot 3 -->
+            <div class="kahoot-note reveal-up delay-6">
+                <span class="badge badge-kahoot">🎮 KAHoot 3</span>
+                <h4>Confianza Digital</h4>
+                <p>5 preguntas sobre blockchain y regulaciones. EUDR, trazabilidad, herramientas. ¡Vamos por el podio!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 19. TALLER PRÁCTICO                              -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="taller" class="grad-mixed">
+        <div class="section-inner">
+            <span class="badge badge-actividad reveal-fade">Bloque 4 — Taller Práctico</span>
+            <h2 class="section-title reveal-left delay-1" style="margin-top: 1rem;">Actividades<br>del Taller</h2>
+            <p class="section-subtitle reveal-up delay-2">De pie. En grupo. Probando herramientas. Así es como se aprende.</p>
+        </div>
+
+        <!-- Actividad: Verdadero o Falso -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--orange);">
+                <h4 style="color: var(--orange);">⚡ Energizador: ¿Verdadero o Falso?</h4>
+                <div class="timer-box" style="margin: 0.5rem 0;">⏱ 5 min</div>
+                <p>De pie. Brazos arriba = Verdadero, brazos cruzados = Falso. Quien se equivoca, se sienta.</p>
+                <p style="margin-top: 0.5rem;">"ChatGPT puede escribir un correo en inglés para vender tu cacao en Alemania." → <strong style="color: var(--green);">VERDADERO ✓</strong></p>
+                <p>"La IA necesita que sepas programar para usarla." → <strong style="color: var(--green);">FALSO ✗</strong></p>
+                <p>"Google Trends te dice qué buscan los compradores en Europa." → <strong style="color: var(--green);">VERDADERO ✓</strong></p>
+            </div>
+        </div>
+
+        <!-- Actividad: Tu Primer Prompt -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--green);">
+                <h4>📝 Actividad: Tu Primer Prompt Comercial</h4>
+                <div class="timer-box">⏱ 10 min</div>
+                <p>Abre <strong class="highlight-v">ChatGPT</strong> o <strong class="highlight-v">Claude</strong> en tu celular. Escribe este prompt:</p>
+                <div class="quote reveal-up" style="font-size: 1rem; margin-top: 1rem;">
+                    "Eres un experto en comercio internacional. Escribe un correo comercial en inglés para un importador alemán interesado en cacao orgánico del Chocó, Colombia. Destaca: calidad, origen, certificación y volumen disponible."
+                </div>
+                <p class="section-subtitle reveal-up" style="margin-top: 1rem;">Lee tu resultado al compañero de al lado. <span class="highlight-g">¿Cuál suena más profesional?</span></p>
+            </div>
+        </div>
+
+        <!-- Actividad: Diseña tu Catálogo -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--cyan);">
+                <h4>🎨 Actividad: Diseña tu Catálogo con IA</h4>
+                <div class="timer-box">⏱ 15 min</div>
+                <p>En grupos de 3. Elige un producto. Usa <strong class="highlight-v">Canva AI</strong> o <strong class="highlight-v">Gamma</strong>:</p>
+                <div class="grid-3" style="margin-top: 1rem;">
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>1. Descripción del producto</h4>
+                        <p>Pídele a la IA que escriba una descripción atractiva para catálogo internacional.</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>2. Post de Instagram</h4>
+                        <p>Genera un post con copy + hashtags para promocionar tu producto.</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>3. Propuesta de valor</h4>
+                        <p>"¿Por qué un comprador europeo elegiría nuestro producto sobre otro?"</p>
+                    </div>
+                </div>
+                <p class="section-subtitle" style="margin-top: 1rem;"><span class="highlight-g">Cada grupo presenta su mejor resultado en 30 segundos.</span></p>
+            </div>
+        </div>
+
+        <!-- Actividad: Google Trends -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--violet);">
+                <h4>📊 Actividad: Análisis de Mercado con Google Trends + IA</h4>
+                <div class="timer-box">⏱ 12 min</div>
+                <div class="step-list">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-text">Abre <a href="https://trends.google.com" target="_blank" class="text-link">Google Trends</a> → Busca tu producto → Compara por país</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-text">Toma captura de los datos de tendencia</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-text">Pega los datos en ChatGPT: "Analiza estos datos y dime cuál es el mejor mercado europeo y cuándo es la mejor época para exportar."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Play -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--gold);">
+                <h4>🤝 Actividad: Role-Play — El Comprador Exigente</h4>
+                <div class="timer-box">⏱ 10 min</div>
+                <p>En parejas. Uno es el <strong>productor colombiano</strong>, el otro es un <strong class="highlight-v">comprador europeo exigente</strong>.</p>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="feature" style="border-color: rgba(0,230,118,0.2);">
+                        <h4 style="color: var(--green);">🇨🇴 Productor</h4>
+                        <p>Debes convencer al comprador. Usa datos, certificación y trazabilidad.</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(124,77,255,0.2);">
+                        <h4 style="color: var(--violet);">🇩🇪 Comprador</h4>
+                        <p>Haz preguntas difíciles: ¿De dónde viene? ¿Certificación? ¿Volumen constante?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Hackathon -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--cyan);">
+                <h4>🚀 Mini Hackathon: Tu Empresa Digital</h4>
+                <div class="timer-box">⏱ 18 min</div>
+                <p>En grupos de 4-5. Diseñen el plan de digitalización de una empresa real:</p>
+                <div class="grid-3" style="margin-top: 1rem;">
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>📋 Diagnóstico</h4>
+                        <p>¿Qué procesos manuales consume más tiempo?</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>🤖 IA</h4>
+                        <p>¿Qué procesos pueden automatizarse? ¿Qué herramientas?</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(240,240,250,0.05);">
+                        <h4>🔗 Blockchain</h4>
+                        <p>¿Qué datos del producto pueden certificarse? ¿Qué regulación aplica?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa de Automatización -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--green);">
+                <h4>🗺️ Actividad: Tu Mapa de Automatización</h4>
+                <div class="timer-box">⏱ 10 min</div>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="feature" style="border-color: rgba(0,230,118,0.2);">
+                        <h4 style="color: var(--green);">🟢 Lo que puedo automatizar HOY</h4>
+                        <p>Correos, catálogos, redes sociales — herramientas gratuitas</p>
+                    </div>
+                    <div class="feature" style="border-color: rgba(255,107,53,0.2);">
+                        <h4 style="color: var(--orange);">🟡 Lo que puedo automatizar en 3 meses</h4>
+                        <p>Chatbot web, análisis de datos, blockchain — requiere aprender</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Final -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="feature reveal-scale" style="border-color: var(--violet);">
+                <h4>📋 Quiz: ¿Cuánto Aprendiste?</h4>
+                <div class="timer-box">⏱ 5 min</div>
+                <p>5 preguntas rápidas. Levanten la mano con el número de la respuesta correcta.</p>
+                <p style="margin-top: 0.5rem;">1. ¿Qué % del tiempo laboral es automatizable? → <strong style="color: var(--green);">60-70%</strong></p>
+                <p>2. ¿Impacto económico de IA generativa? → <strong style="color: var(--green);">$4.4 billones/año</strong></p>
+                <p>3. ¿Qué regulación europea obliga a trazabilidad? → <strong style="color: var(--green);">EUDR</strong></p>
+                <p>4. ¿Qué % de consumidores paga más por blockchain? → <strong style="color: var(--green);">67%</strong></p>
+                <p>5. ¿Un LLM es? → <strong style="color: var(--green);">Una red neuronal que predice el siguiente token</strong></p>
+            </div>
+        </div>
+
+        <!-- Actividades Extra -->
+        <div class="section-inner" style="margin-top: 3rem;">
+            <h3 class="section-title reveal-left" style="font-size: 1.8rem;">Actividades Extra</h3>
+            <p class="section-subtitle reveal-up">Intercambiar según energía del grupo</p>
+            <div class="grid-3" style="margin-top: 2rem;">
+                <div class="feature reveal-scale delay-1">
+                    <h4>💰 Subasta de Confianza</h4>
+                    <p>Dos productores, mismo cacao. Uno con blockchain, otro sin. Los compradores ofertan. El resultado: blockchain recibe ofertas 30-50% más altas.</p>
+                </div>
+                <div class="feature reveal-scale delay-2">
+                    <h4>⚡ Speed Dating Empresarial</h4>
+                    <p>Dos filas enfrentadas. 60 segundos cada persona para presentar su empresa y decir qué necesita. Campana → rotar.</p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>⚖️ Juicio del Producto Falso</h4>
+                    <p>"Cacao supuestamente del Chocó" resulta ser de otro origen. Fiscalía vs Defensa. Jurado vota. ¿Cómo blockchain hubiera prevenido el fraude?</p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>🔐 Escape Room: Descifra el Origen</h4>
+                    <p>5 estaciones con acertijos. Decodifica un hash, empareja términos blockchain, detecta el certificado falso, encuentra el QR escondido.</p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>🔥 Batalla de Prompts</h4>
+                    <p>3 rondas de 90 segundos. Equipos compiten para escribir el mejor prompt de IA. Se ejecuta en vivo y el público vota.</p>
+                </div>
+                <div class="feature reveal-scale delay-6">
+                    <h4>🧱 Muro de la Transformación</h4>
+                    <p>Post-it verde: "Lo primero que voy a implementar." Post-it naranja: "Mi mayor aprendizaje." Todos pegan en la pared. Foto grupal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAHoot 4 -->
+        <div class="section-inner" style="margin-top: 2rem;">
+            <div class="kahoot-note reveal-up">
+                <span class="badge badge-kahoot">🎮 KAHoot 4</span>
+                <h4>Hoja de Ruta Final</h4>
+                <p>5 preguntas finales — ¿Qué te quedó de todo el taller? ¡Quién se lleva el primer lugar!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 20. HOJA DE RUTA                                 -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="hoja-ruta" class="grad-cyan">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Tu camino</div>
+            <h2 class="section-title reveal-left delay-1">Resumen:<br>Tu Hoja de Ruta</h2>
+            <div class="line-draw delay-2"></div>
+            <div class="step-list">
+                <div class="step reveal-left delay-2">
+                    <div class="step-num" style="border-color: var(--cyan); color: var(--cyan);">1</div>
+                    <div class="step-text"><strong>Hoy:</strong> Regístrate en <a href="https://chat.openai.com" target="_blank" class="text-link">ChatGPT</a> o <a href="https://claude.ai" target="_blank" class="text-link">Claude</a> y escribe tu primer correo comercial con IA. Es gratis.</div>
+                </div>
+                <div class="step reveal-left delay-3">
+                    <div class="step-num" style="border-color: var(--violet); color: var(--violet);">2</div>
+                    <div class="step-text"><strong>Esta semana:</strong> Investiga una plataforma blockchain: <a href="https://www.vechain.org" target="_blank" class="text-link">VeChain</a> (manufactura/alimentos) · <a href="https://origintrail.io" target="_blank" class="text-link">OriginTrail</a> (open source) · <a href="https://www.provenance.org" target="_blank" class="text-link">Provenance</a> (mercado europeo)</div>
+                </div>
+                <div class="step reveal-left delay-4">
+                    <div class="step-num" style="border-color: var(--green); color: var(--green);">3</div>
+                    <div class="step-text"><strong>Este mes:</strong> Diseña tu pasaporte digital de producto. ¿Qué datos registrar en cada etapa? Usa lo que hiciste hoy como base.</div>
+                </div>
+                <div class="step reveal-left delay-5">
+                    <div class="step-num" style="border-color: var(--orange); color: var(--orange);">4</div>
+                    <div class="step-text"><strong>En 3 meses:</strong> Implementa un piloto. No migres toda la empresa. Elige un producto estrella y prueba con él.</div>
+                </div>
+                <div class="step reveal-left delay-6">
+                    <div class="step-num" style="border-color: var(--gold); color: var(--gold);">5</div>
+                    <div class="step-text"><strong>En 6 meses:</strong> Tu primera venta internacional con certificación digital verificable.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 21. RECURSOS CLAVE                               -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="recursos" class="grad-mixed">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Recursos</div>
+            <h2 class="section-title reveal-left delay-1">Recursos y<br>Herramientas Clave</h2>
+            <div class="two-col">
+                <div class="reveal-up delay-2">
+                    <h3 style="color: var(--cyan); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; margin-bottom: 1rem;">BLOCKCHAIN</h3>
+                    <p class="two-col-text">
+                        <a href="https://www.vechain.org" target="_blank" class="text-link">VeChain ToolChain</a> — BaaS (Walmart, Bayer, DNV)<br>
+                        <a href="https://origintrail.io" target="_blank" class="text-link">OriginTrail DKG</a> — Open source, multiindustria<br>
+                        <a href="https://www.farmerconnect.com" target="_blank" class="text-link">Farmer Connect</a> — Café (alianza FNC Colombia)<br>
+                        <a href="https://textilegenesis.com" target="_blank" class="text-link">TextileGenesis</a> — Fibras textiles (H&M, Lenzing)<br>
+                        <a href="https://tonyschocolonely.com/pages/bean-tracker" target="_blank" class="text-link">BeanTracker</a> — Cacao (Tony's Chocolonely)
+                    </p>
+                </div>
+                <div class="reveal-up delay-3">
+                    <h3 style="color: var(--violet); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; margin-bottom: 1rem;">INTELIGENCIA ARTIFICIAL</h3>
+                    <p class="two-col-text">
+                        <a href="https://chat.openai.com" target="_blank" class="text-link">ChatGPT</a> — Textos, correos, traducciones<br>
+                        <a href="https://claude.ai" target="_blank" class="text-link">Claude</a> — Análisis y documentos<br>
+                        <a href="https://gamma.app" target="_blank" class="text-link">Gamma</a> — Presentaciones con IA<br>
+                        <a href="https://lovable.dev" target="_blank" class="text-link">Lovable</a> — Web/app con IA<br>
+                        <a href="https://perplexity.ai" target="_blank" class="text-link">Perplexity AI</a> — Investigación de mercados
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 22. APOYO INSTITUCIONAL                          -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="apoyos" class="grad-green">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Apoyo</div>
+            <h2 class="section-title reveal-left delay-1">Apoyos para<br>Empresas Colombianas</h2>
+            <div class="grid-3">
+                <div class="feature reveal-scale delay-2">
+                    <h4>ProColombia</h4>
+                    <p>Apoyo gratuito: "Fábricas de Internacionalización", portal de formación exportadora con 8 módulos, ruedas de negocio.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.procolombia.co" target="_blank" class="text-link">procolombia.co</a></p>
+                </div>
+                <div class="feature reveal-scale delay-3">
+                    <h4>iNNpulsa</h4>
+                    <p>Aceleración, financiamiento y mentoría para empresas innovadoras.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.innpulsacolombia.com" target="_blank" class="text-link">innpulsacolombia.com</a></p>
+                </div>
+                <div class="feature reveal-scale delay-4">
+                    <h4>MinTIC</h4>
+                    <p>Programas de transformación digital para MiPYMEs. Capacitación gratuita.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.mintic.gov.co" target="_blank" class="text-link">mintic.gov.co</a></p>
+                </div>
+                <div class="feature reveal-scale delay-5">
+                    <h4>SENA</h4>
+                    <p>Formación gratuita en tecnologías digitales, IA y blockchain.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.sena.edu.co" target="_blank" class="text-link">sena.edu.co</a></p>
+                </div>
+                <div class="feature reveal-scale delay-6">
+                    <h4>Cámara de Comercio</h4>
+                    <p>Formalización, certificados de origen, conexiones comerciales.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://www.ccmpc.org.co" target="_blank" class="text-link">ccmpc.org.co</a></p>
+                </div>
+                <div class="feature reveal-scale delay-7">
+                    <h4>Tr=ce</h4>
+                    <p>Ecosistema de innovación y tecnología. Talleres y acompañamiento.</p>
+                    <p style="margin-top: 0.5rem;"><a href="https://trace.co" target="_blank" class="text-link">trace.co</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 23. MENSAJE CENTRAL                              -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="mensaje" class="grad-violet">
+        <div class="section-inner">
+            <div class="section-label reveal-left">El mensaje central</div>
+            <h2 class="section-title reveal-left delay-1" style="font-size: clamp(1.5rem, 4vw, 3rem);">El Mensaje Central</h2>
+            <div class="line-draw delay-2"></div>
+            <div class="quote reveal-up delay-3">
+                "La empresa que automatiza con IA y certifica su origen con blockchain no solo vende un producto — vende <strong>confianza verificable</strong>. Y la confianza es la moneda más valiosa del comercio internacional."
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 24. PREGUNTAS Y RESPUESTAS                      -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="preguntas" class="grad-gold">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Diálogo</div>
+            <h2 class="section-title reveal-left delay-1" style="font-size: clamp(2rem, 5vw, 3.5rem);">Preguntas<br>y Respuestas</h2>
+            <div class="line-draw delay-2"></div>
+            <p class="section-subtitle reveal-up delay-3">¿Dudas? ¿Ideas? ¿Retos específicos de su empresa?</p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 25. NETWORKING                                   -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="networking" class="grad-green">
+        <div class="section-inner">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80" alt="Networking" class="section-image reveal-scale" style="max-height: 250px;">
+            <h2 class="section-title reveal-left delay-1" style="margin-top: 2rem;">Networking</h2>
+            <p class="section-subtitle reveal-up delay-2">Intercambia contacto con al menos una persona nueva. Comparte: <span class="highlight">¿qué es lo primero que vas a implementar?</span></p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 26. CONTACTO                                     -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="contacto" class="grad-cyan">
+        <div class="section-inner">
+            <div class="section-label reveal-left">Contacto</div>
+            <h2 class="section-title reveal-left delay-1">Contacto del<br>Facilitador</h2>
+            <div class="line-draw delay-2"></div>
+            <div style="text-align: center;" class="reveal-up delay-3">
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--gold); margin-bottom: 1rem;">Camilo Lopez</p>
+                <p style="font-size: 1rem; color: var(--text-dim); margin: 0.5rem 0;">📧 <a href="mailto:anclopezg@udistrital.edu.co" class="text-link">anclopezg@udistrital.edu.co</a></p>
+                <p style="font-size: 1rem; color: var(--text-dim); margin: 0.5rem 0;">📱 305 724 7518</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 1rem;">Universidad Distrital Francisco José de Caldas</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 27. CIERRE IMPACTANTE                            -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="cierre" class="grad-mixed">
+        <div class="section-inner">
+            <h2 class="section-title reveal-left delay-1" style="font-size: clamp(1.5rem, 4vw, 3rem);">La pregunta no es si la tecnología<br>está lista para ustedes.<br><span class="highlight">Lo está.</span></h2>
+            <div class="line-draw delay-2"></div>
+            <p class="section-subtitle reveal-up delay-3">
+                Las herramientas existen. Los mercados lo están pidiendo. Las regulaciones lo van a exigir.
+            </p>
+            <p class="section-subtitle reveal-up delay-4" style="font-size: clamp(1.2rem, 3vw, 1.8rem); margin-top: 2rem;">
+                La pregunta es: <span class="highlight">¿están listos para usarla?</span>
+            </p>
+            <p class="section-subtitle reveal-up delay-5" style="margin-top: 1.5rem;">
+                Hoy tienen las herramientas. Mañana, el mundo quiere comprar lo que Colombia produce.<br>
+                <strong style="color: var(--text); font-weight: 700;">Que su empresa... sea imposible de frenar.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 28. REGISTRO Y EVALUACIÓN                       -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="registro" class="grad-gold">
+        <div class="section-inner">
+            <h2 class="section-title reveal-left delay-1">Registro de Asistencia<br>y Evaluación</h2>
+            <div class="line-draw delay-2"></div>
+            <p class="section-subtitle reveal-up delay-3">Escanea los QR con tu celular. ¡Toma 1 minuto!</p>
+            <div class="grid-2" style="margin-top: 2rem;">
+                <div class="feature reveal-scale delay-4" style="text-align: center; border-color: var(--cyan);">
+                    <h4 style="font-size: 1rem;">📋 Registro de Asistencia</h4>
+                    <p style="margin-top: 0.5rem;">Talleres Presenciales — Col 5.0</p>
+                    <a href="https://forms.cloud.microsoft.com/r/paHNdsXT2d" target="_blank" class="ghost-btn" style="margin-top: 1rem;">Abrir Formulario</a>
+                </div>
+                <div class="feature reveal-scale delay-5" style="text-align: center; border-color: var(--green);">
+                    <h4 style="font-size: 1rem; color: var(--green);">⭐ Evaluación del Taller</h4>
+                    <p style="margin-top: 0.5rem;">Tu opinión nos ayuda a mejorar.</p>
+                    <a href="https://forms.cloud.microsoft.com/r/vP5JNxAzMt" target="_blank" class="ghost-btn" style="margin-top: 1rem;">Abrir Evaluación</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- 29. GRACIAS (FINAL)                             -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="gracias" class="grad-cyan" style="min-height: 100vh;">
+        <div class="section-inner" style="text-align: center;">
+            <h2 class="section-title reveal-fade" style="font-size: clamp(3rem, 8vw, 6rem); font-weight: 900;">¡Gracias!</h2>
+            <div class="line-draw delay-1"></div>
+            <p class="section-subtitle reveal-up delay-2">
+                Muchas gracias a todos por su tiempo, su energía y sus ideas.<br>Nos vemos en el café.
+            </p>
+            <p class="section-subtitle reveal-up delay-3" style="font-size: clamp(1rem, 2.5vw, 1.5rem); margin-top: 2rem; color: var(--gold); font-weight: 700;">
+                🇨🇴 Colombia 5.0 — Tecnología para el campo y la ciudad
+            </p>
+            <p class="section-subtitle reveal-up delay-4" style="margin-top: 1.5rem;">
+                <a href="mailto:anclopezg@udistrital.edu.co" class="text-link">anclopezg@udistrital.edu.co</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- FOOTER                                           -->
+    <!-- ════════════════════════════════════════════════ -->
+    <footer>
+        <p>Camilo Lopez · Universidad Distrital · Bogotá 2026 · IA Aplicada a la Industria — Análisis Descriptivo, Predictivo, QGIS, Visión Artificial & Optimización</p>
+        <p style="margin-top: 0.5rem;"><a href="mailto:anclopezg@udistrital.edu.co">anclopezg@udistrital.edu.co</a></p>
+    </footer>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- JAVASCRIPT                                       -->
+    <!-- ════════════════════════════════════════════════ -->
+    <script>
+        // ── Stars Canvas ──
+        (function() {
+            const canvas = document.getElementById('stars-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            let animId;
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function createStars() {
+                stars = [];
+                const count = Math.floor((canvas.width * canvas.height) / 8000);
+                for (let i = 0; i < count; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.2 + 0.3,
+                        alpha: Math.random(),
+                        speed: Math.random() * 0.005 + 0.002,
+                        phase: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            function draw(time) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    const twinkle = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(240, 240, 250, ${twinkle * 0.6})`;
+                    ctx.fill();
+                });
+                animId = requestAnimationFrame(draw);
+            }
+
+            resize();
+            createStars();
+            draw(0);
+
+            window.addEventListener('resize', () => {
+                resize();
+                createStars();
+            });
+        })();
+
+        // ── Progress Bar ──
+        (function() {
+            const bar = document.getElementById('progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                bar.style.width = progress + '%';
+            });
+        })();
+
+        // ── IntersectionObserver for Scroll Reveal ──
+        (function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            const elements = document.querySelectorAll(
+                '.reveal-left, .reveal-scale, .reveal-up, .reveal-fade, .line-draw, .feature, .stat, .step, .comp-table, .quote, .section-image, .kahoot-note'
+            );
+            elements.forEach(el => observer.observe(el));
+        })();
+
+        // ── Parallax for gradient backgrounds ──
+        (function() {
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const sections = document.querySelectorAll('section');
+                        sections.forEach(section => {
+                            const rect = section.getBoundingClientRect();
+                            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                                const yOffset = (progress - 0.5) * 30;
+                                const bg = section.querySelector('::before');
+                                section.style.backgroundPositionY = yOffset + 'px';
+                            }
+                        });
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
+
+        // ── Smooth scroll for nav links ──
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ── Active nav highlighting ──
+        (function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const top = section.offsetTop - 200;
+                    if (window.scrollY >= top) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.style.color = '';
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.style.color = 'var(--cyan)';
+                    }
+                });
+            });
+        })();
+
+        // ── Remove scroll indicator on scroll ──
+        (function() {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (indicator) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        indicator.style.opacity = '0';
+                        indicator.style.transition = 'opacity 0.3s';
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
