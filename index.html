@@ -909,7 +909,8 @@
             <li><a href="#problema">Problema</a></li>
             <li><a href="#descriptivo">Descriptivo</a></li>
             <li><a href="#predictivo">Predictivo</a></li>
-            <li><a href="#aprendizaje">ML</a></li>
+            <li><a href="#ml-fundamentos">ML</a></li>
+            <li><a href="#aprendizaje">Aprendizaje</a></li>
             <li><a href="#qgis">QGIS</a></li>
             <li><a href="#vision">Visión</a></li>
             <li><a href="#optimizacion">Optimización</a></li>
@@ -1866,6 +1867,245 @@
                     <div class="stat-label" style="font-size: 0.9rem; color: var(--orange); font-weight: 600;">Agente</div>
                     <div style="font-size: 0.75rem; margin-top: 0.3rem; color: var(--ink-light); text-transform: none;">"Investiga X, escribe el correo, envíalo y avísame"</div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- FUNDAMENTOS MACHINE LEARNING (PDF Slides 1-9)   -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section id="ml-fundamentos" class="comic-panel" style="background: var(--newsprint-light);">
+        <div class="halftone-overlay"></div>
+        <div class="section-inner">
+            <div class="section-label">Fundamentos</div>
+            <h2 class="section-title">Machine Learning:<br>Los Fundamentos</h2>
+            <p class="section-subtitle">De la pizarra a la práctica: los conceptos esenciales que todo profesional debe conocer sobre cómo las máquinas aprenden de los datos.</p>
+            <div class="divider" style="background: var(--ink); height: 3px; width: 80px; margin: 1rem auto;"></div>
+        </div>
+    </section>
+
+    <!-- SLIDE 1: Imagen Pizarra ML -->
+    <section id="ml-slide1" class="comic-panel" style="background: var(--white-comic);">
+        <div class="section-inner">
+            <p style="text-align: center; font-family: 'Bangers', cursive; font-size: 0.9rem; color: var(--ink-faded); letter-spacing: 0.05em;">— El universo matemático del Machine Learning —</p>
+            <img src="fundamentos_ml/slide_1.png" alt="Pizarra con ecuaciones de Machine Learning: regresión lineal, gradient descent, funciones sigmoide, redes neuronales" class="section-image" style="max-height: 500px; border: 4px solid var(--ink);">
+        </div>
+    </section>
+
+    <!-- SLIDE 2: ¿Qué es el Machine Learning? -->
+    <section id="ml-slide2" class="comic-panel">
+        <div class="section-inner">
+            <div class="speech-bubble reveal-up">
+                <h3 style="font-family: 'Bangers', cursive; font-size: 1.8rem; color: var(--red-vintage); text-align: center;">¿Qué es el Machine Learning?</h3>
+                <p style="text-align: center; font-size: 1.1rem; font-weight: 700; margin: 1rem 0;">Sistemas que aprenden <strong>patrones a partir de datos</strong> para predecir el futuro, en lugar de ser programados con reglas fijas.</p>
+            </div>
+            <div class="grid-2" style="margin-top: 2rem;">
+                <!-- Supervisado -->
+                <div class="feature" style="border-color: var(--blue-vintage); border-width: 3px; background: var(--white-comic);">
+                    <h4 style="font-family: 'Bangers', cursive; font-size: 1.3rem; color: white; text-align: center; background: var(--blue-vintage); padding: 0.5rem; margin: -0.5rem -0.5rem 0.8rem -0.5rem; border-radius: 2px;">📋 APRENDIZAJE SUPERVISADO</h4>
+                    <p style="font-weight: 700;">Aprende de ejemplos con <strong>respuestas correctas</strong> (etiquetas).</p>
+                    <div style="margin-top: 1rem;">
+                        <div style="background: var(--blue-vintage); color: white; padding: 0.4rem 0.6rem; border-radius: 3px; margin-bottom: 0.5rem;">
+                            <strong>Clasificación:</strong> Predice categorías discretas.<br>
+                            <em style="font-size: 0.85rem;">¿Es fraude o no? ¿Qué factor de autenticación elegirá?</em>
+                        </div>
+                        <div style="background: white; border: 2px solid var(--blue-vintage); padding: 0.4rem 0.6rem; border-radius: 3px;">
+                            <strong>Regresión:</strong> Predice valores continuos.<br>
+                            <em style="font-size: 0.85rem;">Precio de una propiedad</em>
+                        </div>
+                    </div>
+                </div>
+                <!-- No Supervisado -->
+                <div class="feature" style="border-color: var(--yellow-vintage); border-width: 3px; background: var(--white-comic);">
+                    <h4 style="font-family: 'Bangers', cursive; font-size: 1.3rem; color: var(--ink); text-align: center; background: var(--yellow-vintage); padding: 0.5rem; margin: -0.5rem -0.5rem 0.8rem -0.5rem; border-radius: 2px;">🔍 APRENDIZAJE NO SUPERVISADO</h4>
+                    <p style="font-weight: 700;">Encuentra <strong>estructuras ocultas</strong> en datos sin etiquetas previas.</p>
+                    <div style="margin-top: 1rem;">
+                        <div style="background: var(--yellow-vintage); color: var(--ink); padding: 0.4rem 0.6rem; border-radius: 3px;">
+                            <strong>Clusterización (Agrupamiento):</strong> Agrupa elementos con comportamientos similares.<br>
+                            <em style="font-size: 0.85rem;">Segmentación de usuarios</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: Ciclo de Vida ML -->
+    <section id="ml-slide3" class="comic-panel" style="background: var(--white-comic);">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--red-vintage); text-align: center; margin-bottom: 1.5rem;">Ciclo de Vida Machine Learning</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: var(--ink-faded); margin-bottom: 1.5rem;">Un enfoque iterativo: el ML nunca termina, siempre mejora.</p>
+            <img src="fundamentos_ml/slide_3.png" alt="Diagrama circular del ciclo de vida ML con 10 pasos" class="section-image" style="max-height: 450px;">
+            <!-- Steps breakdown -->
+            <div class="grid-2" style="margin-top: 1.5rem;">
+                <div class="feature" style="border-color: var(--blue-vintage); border-width: 3px;">
+                    <h4 style="color: var(--blue-vintage); font-family: 'Bangers', cursive;">🔵 Problem Framing &amp; Use Case Discovery</h4>
+                    <p><strong>1.</strong> Define Business Use Cases</p>
+                    <p><strong>2.</strong> Data Exploration</p>
+                </div>
+                <div class="feature" style="border-color: var(--red-vintage); border-width: 3px;">
+                    <h4 style="color: var(--red-vintage); font-family: 'Bangers', cursive;">🔴 Data Analysis &amp; Feasibility Study</h4>
+                    <p><strong>3.</strong> Select Algorithm</p>
+                </div>
+                <div class="feature" style="border-color: var(--yellow-vintage); border-width: 3px;">
+                    <h4 style="color: var(--yellow-vintage); font-family: 'Bangers', cursive;">🟡 Feature Engineering &amp; Model Development</h4>
+                    <p><strong>4.</strong> Data Pipeline and Feature Engineering</p>
+                    <p><strong>5.</strong> Build ML Model</p>
+                    <p><strong>6.</strong> Evaluate</p>
+                </div>
+                <div class="feature" style="border-color: var(--green-vintage); border-width: 3px;">
+                    <h4 style="color: var(--green-vintage); font-family: 'Bangers', cursive;">🟢 Production Deployment &amp; Operations</h4>
+                    <p><strong>7.</strong> Present Results</p>
+                    <p><strong>8.</strong> Plan for Deployment</p>
+                    <p><strong>9.</strong> Operationalize Model</p>
+                    <p><strong>10.</strong> Monitor Model</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: Conceptos Clave del Modelo -->
+    <section id="ml-slide4" class="comic-panel">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--blue-vintage); text-align: center; margin-bottom: 1.5rem;">Conceptos Clave del Modelo</h3>
+            <div class="grid-2">
+                <div>
+                    <div class="feature" style="border-color: var(--blue-vintage); border-width: 3px; margin-bottom: 1rem;">
+                        <h4 style="color: var(--blue-vintage);">🔑 Features (Características)</h4>
+                        <p>Las <strong>variables de entrada</strong> que usa el modelo para predecir. Son las "pistas" del modelo.</p>
+                    </div>
+                    <div class="feature" style="border-color: var(--red-vintage); border-width: 3px; margin-bottom: 1rem;">
+                        <h4 style="color: var(--red-vintage);">📐 Regresión Lineal</h4>
+                        <p>Trazar la <strong>línea recta</strong> que mejor se ajusta a nuestros datos.</p>
+                    </div>
+                    <div class="feature" style="border-color: var(--green-vintage); border-width: 3px;">
+                        <h4 style="color: var(--green-vintage);">⚖️ Pesos (Weights) y Sesgos (Bias)</h4>
+                        <p>Los parámetros internos que el modelo ajusta para <strong>inclinar</strong> o <strong>mover</strong> esa línea.</p>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <img src="fundamentos_ml/slide_4.png" alt="Gráfico de dispersión: Precio vs Metros cuadrados con línea de regresión azul" class="section-image" style="max-height: 350px;">
+                </div>
+            </div>
+            <div class="speech-bubble" style="background: var(--newsprint); border-color: var(--ink-faded); margin-top: 1rem;">
+                <p style="font-style: italic;"><strong>Nota del Instructor:</strong> Para construir un modelo de Regresión Lineal, necesitamos Features, que son nuestras pistas. En los bienes raíces, un Feature es el tamaño de la propiedad. Nuestro objetivo es trazar una línea que pase lo más cerca posible de todos los precios históricos. El modelo ajusta sus Weights (la inclinación de la línea) y su Bias (el precio base de una casa de cero metros cuadrados). <strong>Es geometría básica aplicada a negocios.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: Entrenando el Modelo -->
+    <section id="ml-slide5" class="comic-panel" style="background: var(--white-comic);">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--blue-vintage); text-align: center; margin-bottom: 1.5rem;">Entrenando el Modelo</h3>
+            <div class="grid-2">
+                <div>
+                    <div class="feature" style="border-color: var(--red-vintage); border-width: 3px; margin-bottom: 1rem;">
+                        <h4 style="color: var(--red-vintage);">📉 Función de Pérdida (Loss)</h4>
+                        <p>Mide <strong>qué tan equivocadas</strong> son las predicciones del modelo.</p>
+                    </div>
+                    <div class="feature" style="border-color: var(--blue-vintage); border-width: 3px; margin-bottom: 1rem;">
+                        <h4 style="color: var(--blue-vintage);">⛰️ Descenso de Gradiente (Gradient Descent)</h4>
+                        <p>El algoritmo para <strong>minimizar el Loss</strong>.</p>
+                    </div>
+                    <div class="feature" style="border-color: var(--green-vintage); border-width: 3px;">
+                        <h4 style="color: var(--green-vintage);">👣 Learning Rate</h4>
+                        <p>El <strong>tamaño de los pasos</strong> que da el modelo al ajustarse.</p>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <img src="fundamentos_ml/slide_5.png" alt="Curva de pérdida en forma de U con descenso hacia el mínimo error" class="section-image" style="max-height: 350px;">
+                </div>
+            </div>
+            <div class="speech-bubble" style="background: #E8F0FE; border-color: var(--blue-vintage); margin-top: 1rem;">
+                <p><strong>Nota del Instructor:</strong> Entrenar un modelo es literalmente minimizar su error, lo que llamamos Loss. Imaginen que están con los ojos vendados en lo alto de una montaña y quieren llegar al valle más bajo. El <strong>Gradient Descent</strong> es la técnica de sentir la inclinación del suelo bajo sus pies para saber hacia dónde bajar. El <strong>Learning Rate</strong> es la longitud de sus pasos. Si dan pasos muy grandes, podrían saltarse el valle; si dan pasos muy pequeños, tardarán una eternidad en llegar al fondo donde el modelo es más preciso.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: Calibrando el Learning Rate -->
+    <section id="ml-slide6" class="comic-panel">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--blue-vintage); text-align: center; margin-bottom: 0.5rem;">Calibrando el Ajuste</h3>
+            <p style="text-align: center; font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem;">Learning Rate: El Tamaño del Paso</p>
+            <img src="fundamentos_ml/slide_6.png" alt="Tres escenarios de Learning Rate: pasos pequeños (lento), pasos gigantes (caos), óptimo (perfecto)" class="section-image" style="max-height: 400px;">
+            <div class="grid-3" style="margin-top: 1.5rem;">
+                <div class="comic-stat" style="background: var(--red-vintage); color: white;">
+                    <div class="num" style="color: white;">🐢</div>
+                    <div class="label" style="color: white;">Pasos muy pequeños<br>Demasiado lento</div>
+                </div>
+                <div class="comic-stat" style="background: var(--yellow-vintage);">
+                    <div class="num">🌀</div>
+                    <div class="label">Pasos gigantes<br>Caos total</div>
+                </div>
+                <div class="comic-stat" style="background: var(--green-vintage); color: white;">
+                    <div class="num" style="color: white;">🎯</div>
+                    <div class="label" style="color: white;">Óptimo<br>Calibración perfecta</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: Los Datos -->
+    <section id="ml-slide7" class="comic-panel" style="background: var(--white-comic);">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--blue-vintage); text-align: center; margin-bottom: 1.5rem;">Los Datos</h3>
+            <div class="speech-bubble" style="background: var(--yellow-vintage); border-color: var(--ink);">
+                <p style="font-weight: 700; text-align: center; font-size: 1.1rem;">La calidad del modelo depende directamente de la <strong>calidad de los datos</strong>.</p>
+            </div>
+            <div class="grid-2" style="margin-top: 1.5rem;">
+                <div class="feature" style="border-color: var(--red-vintage); border-width: 3px;">
+                    <h4 style="color: var(--red-vintage);">🧹 Limpieza de Datos</h4>
+                    <p>Manejar <strong>valores nulos</strong>, <strong>atípicos</strong> y <strong>errores de captura</strong>.</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Si alguien tiene "999 años" de edad, eso es un error que hay que limpiar.</p>
+                </div>
+                <div class="feature" style="border-color: var(--blue-vintage); border-width: 3px;">
+                    <h4 style="color: var(--blue-vintage);">⚙️ Feature Engineering</h4>
+                    <p>Transformar <strong>datos crudos</strong> (texto, categorías) en <strong>formatos numéricos</strong> útiles.</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">"Nivel de Educación" → columnas numéricas que el modelo puede procesar.</p>
+                </div>
+            </div>
+            <img src="fundamentos_ml/slide_7.png" alt="Flujo: Datos Crudos con error 999 → Feature Engineering → Datos Procesados limpios" class="section-image" style="max-height: 300px; margin-top: 1rem;">
+            <div class="speech-bubble" style="background: #E8F0FE; border-color: var(--blue-vintage); margin-top: 1rem;">
+                <p><strong>Nota del Instructor:</strong> Un modelo complejo no salvará datos defectuosos. Gran parte del trabajo en Machine Learning ocurre antes de entrenar, en la etapa de preparación. <strong>Sin buenos Features, no hay buenas predicciones.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: One-Hot Encoding -->
+    <section id="ml-slide8" class="comic-panel">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--blue-vintage); text-align: center; margin-bottom: 0.5rem;">One-Hot Encoding Explicado</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: var(--ink-faded); margin-bottom: 1.5rem;">Cómo traducimos texto a números que la máquina entiende</p>
+            <img src="fundamentos_ml/slide_8.png" alt="One-Hot Encoding: variable texto Dispositivo transformada en columnas binarias" class="section-image" style="max-height: 350px;">
+            <div class="speech-bubble" style="margin-top: 1rem; background: var(--newsprint);">
+                <p><strong>Nota del Instructor:</strong> One-Hot Encoding es nuestra herramienta de traducción geométrica. Toma una sola columna de texto con múltiples categorías y la "explota" en varias columnas nuevas. Cada categoría obtiene su propia columna binaria: <strong>1 = Verdadero (Presencia), 0 = Falso (Ausencia)</strong>. Esta técnica preserva el contexto del usuario en un formato <strong>100% numérico</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: El Peligro de Memorizar -->
+    <section id="ml-slide9" class="comic-panel" style="background: var(--white-comic);">
+        <div class="section-inner">
+            <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: var(--red-vintage); text-align: center; margin-bottom: 1.5rem;">El Peligro de Memorizar</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: var(--ink-faded); margin-bottom: 1.5rem;">Underfitting ↔ Generalización ↔ Overfitting</p>
+            <img src="fundamentos_ml/slide_9.png" alt="Tres modelos: Underfitting (muy simple), Generalización (ideal), Overfitting (memoriza el ruido)" class="section-image" style="max-height: 400px;">
+            <div class="grid-3" style="margin-top: 1.5rem;">
+                <div class="feature" style="border-color: var(--ink-faded); border-width: 3px; text-align: center;">
+                    <h4 style="color: var(--ink-faded); font-family: 'Bangers', cursive;">Underfitting</h4>
+                    <p>El modelo es <strong>demasiado simple</strong> y no aprende los patrones.</p>
+                </div>
+                <div class="feature" style="border-color: var(--green-vintage); border-width: 3px; text-align: center; background: var(--newsprint-light);">
+                    <h4 style="color: var(--green-vintage); font-family: 'Bangers', cursive;">Generalización ✓</h4>
+                    <p><strong>El equilibrio ideal</strong> para predecir datos nunca antes vistos.</p>
+                </div>
+                <div class="feature" style="border-color: var(--red-vintage); border-width: 3px; text-align: center;">
+                    <h4 style="color: var(--red-vintage); font-family: 'Bangers', cursive;">Overfitting ✗</h4>
+                    <p>El modelo <strong>memoriza el ruido</strong> y falla en el mundo real.</p>
+                </div>
+            </div>
+            <div class="speech-bubble" style="background: #FFF3E0; border-color: var(--red-vintage); margin-top: 1rem;">
+                <p><strong>Nota del Instructor:</strong> El mayor riesgo en Machine Learning es el <strong>Overfitting</strong>. Es como un estudiante que memoriza las respuestas exactas de un examen de práctica, pero reprueba la prueba final porque no entendió los conceptos. Buscamos la generalización: <strong>capturar la regla, no la excepción.</strong></p>
             </div>
         </div>
     </section>
